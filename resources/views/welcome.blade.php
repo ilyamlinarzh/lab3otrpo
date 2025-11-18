@@ -18,9 +18,12 @@
         Хронология Олимпийских игр
       </span>
     </div>
-    <button id="loadBtn" class="btn bg-accent-1 text-white border-0 custom-btn">
-      Загрузить
-    </button>
+    <a id="loadBtn" href="{{ route('olympic-games.create') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
+      Добавить
+    </a>
+    <!-- <button id="loadBtn" class="btn bg-accent-1 text-white border-0 custom-btn">
+      Добавить
+    </button> -->
   </div>
 </nav>
 
