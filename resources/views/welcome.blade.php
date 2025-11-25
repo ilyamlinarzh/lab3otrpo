@@ -29,7 +29,7 @@
 
   <!-- Контент -->
   <div class="container my-4">
-    <h1 onclick="test()" class="mb-4 text-center">Список Олимпийских игр</h1>
+    <h1 class="mb-4 text-center">Список Олимпийских игр</h1>
     <div class="row g-4 cardContainer">
       @foreach($games as $index => $game)
         <div class="col-sm-6 col-lg-4 mb-4 cardCol">
@@ -48,7 +48,7 @@
               <h5 class="card-title">{{ $game->title }}</h5>
               <p class="card-text flex-grow-1">
                 {{ $game->short_description }}
-                <a href="#" onclick='alert("{{ $game->fun_fact }}")' class="details-link text-accent-1" data-bs-toggle="modal" data-bs-target="#detailsModal" data-index="{{ $game->id }}" data-game-id="{{ $game->id }}">
+                <a href="{{ route('olympic-games.show', $game->id) }}" class="details-link text-accent-1" data-bs-toggle="modal" data-bs-target="#detailsModal" data-index="{{ $game->id }}" data-game-id="{{ $game->id }}">
                   Подробнее
                 </a>
               </p>

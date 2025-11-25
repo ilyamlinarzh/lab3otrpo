@@ -26,6 +26,10 @@ async function loadModalContent(gameId) {
       return '<div class="alert alert-danger">Ошибка загрузки данных</div>';
   }
 }
+ 
+$('.details-link').on('click', function () {
+	alert('Сработал клик на блок с классом "ic-block"');
+});
 
 // Функция для открытия модалки
 async function openGameModal(gameId, index) {

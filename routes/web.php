@@ -17,3 +17,4 @@ use App\Http\Controllers\OlympicGameController;
 
 Route::resource('olympic-games', OlympicGameController::class);
 Route::get('/', [OlympicGameController::class, 'index']);
+
