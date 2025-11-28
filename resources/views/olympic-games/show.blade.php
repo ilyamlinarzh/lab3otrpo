@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $game->title }} - Хронология Олимпийских игр</title>
+    <title>{{ $game->title }}, {{ $game->city }}</title>
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -12,11 +12,11 @@
         <div class="container d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <div class="bg-accent-1 text-white d-flex align-items-center justify-content-center me-4 custom-logo">P</div>
-                <a href="{{ route('olympic-games.index') }}" class="navbar-brand mb-0 text-accent-1 fs-6 fw-normal sitename">
+                <a href="/" class="navbar-brand mb-0 text-accent-1 fs-6 fw-normal sitename">
                     Хронология Олимпийских игр
                 </a>
             </div>
-            <a href="{{ route('olympic-games.index') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
+            <a href="/" class="btn bg-accent-1 text-white border-0 custom-btn">
                 Назад к списку
             </a>
         </div>

@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Хронология Олимпийских игр</title>
-  <!-- Подключаем скомпилированные стили -->
   <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -30,6 +29,21 @@
   <!-- Контент -->
   <div class="container my-4">
     <h1 class="mb-4 text-center">Список Олимпийских игр</h1>
+
+    
+      <div class="d-flex justify-content-center mb-4">
+        <div class="btn-group" role="group">
+          <a href="/" 
+              class="btn btn-outline-primary {{ !request()->has('sort') || request('sort') == 'desc' ? 'active' : '' }}">
+            Сначала новые
+          </a>
+          <a href="/?sort=asc" 
+              class="btn btn-outline-primary {{ request('sort') == 'asc' ? 'active' : '' }}">
+            Сначала старые
+          </a>
+        </div>
+      </div>
+    
     <div class="row g-4 cardContainer">
       @foreach($games as $index => $game)
         <div class="col-sm-6 col-lg-4 mb-4 cardCol">
@@ -120,8 +134,6 @@
     </div>
   </div>
 </footer>
-
-<!-- Подключаем скомпилированные скрипты -->
 <script src="{{ asset('js/main.js') }}"></script>
 </body>
 </html>

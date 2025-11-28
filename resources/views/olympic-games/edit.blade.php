@@ -12,11 +12,11 @@
         <div class="container d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <div class="bg-accent-1 text-white d-flex align-items-center justify-content-center me-4 custom-logo">P</div>
-                <a href="{{ route('olympic-games.index') }}" class="navbar-brand mb-0 text-accent-1 fs-6 fw-normal sitename">
+                <a href="/" class="navbar-brand mb-0 text-accent-1 fs-6 fw-normal sitename">
                     Хронология Олимпийских игр
                 </a>
             </div>
-            <a href="{{ route('olympic-games.index') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
+            <a href="/" class="btn bg-accent-1 text-white border-0 custom-btn">
                 Назад к списку
             </a>
         </div>
@@ -62,7 +62,7 @@
                                         <label for="year" class="form-label">Год проведения *</label>
                                         <input type="number" class="form-control @error('year') is-invalid @enderror" 
                                                id="year" name="year" value="{{ old('year', $game->year) }}" 
-                                               min="1900" max="2030" required>
+                                               min="1900" max="2060" required>
                                         @error('year')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -127,7 +127,7 @@
 
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">Сохранить изменения</button>
-                                <a href="{{ route('olympic-games.index') }}" class="btn btn-secondary">Отмена</a>
+                                <a href="/" class="btn btn-secondary">Отмена</a>
                                 <a href="{{ route('olympic-games.show', $game->id) }}" class="btn btn-outline-info">Просмотр</a>
                             </div>
                         </form>

@@ -21,9 +21,12 @@ class OlympicGameController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $games = OlympicGame::orderBy('year', 'desc')->get();
+        $sortOrder = $request->get('sort', 'desc');
+        $sortOrder = in_array(strtolower($sortOrder), ['asc', 'desc']) ? $sortOrder : 'desc';
+        
+        $games = OlympicGame::orderBy('year', $sortOrder)->get();
         return view('welcome', compact('games'));
     }
 
@@ -63,8 +66,7 @@ class OlympicGameController extends Controller
 
         OlympicGame::create($validated);
 
-        return redirect()->route('olympic-games.index')
-            ->with('success', 'Олимпийские игры успешно добавлены!');
+        return redirect("/")->with('success', 'Олимпийские игры успешно добавлены!');
     }
 
     /**
@@ -135,7 +137,6 @@ class OlympicGameController extends Controller
 
         $game->delete();
 
-        return redirect()->route('olympic-games.index')
-            ->with('success', 'Олимпийские игры успешно удалены!');
+        return redirect("/")->with('success', 'Олимпийские игры успешно удалены!');
     }
 }
