@@ -4,9 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\OlympicGame;
+use App\Services\ImageService;
 
 class OlympicGameController extends Controller
 {
+    protected $imageService;
+
+    public function __construct()
+    {
+        // Создаем экземпляр сервиса напрямую
+        $this->imageService = new ImageService();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -47,15 +56,8 @@ class OlympicGameController extends Controller
         ]);
 
         if ($request->hasFile('image_upload')) {
-            $image = $request->file('image_upload');
-            
-            $extension = $image->getClientOriginalExtension();
-            $imageName = uniqid() . '_' . time() . '.' . $extension;
-            
-            $image->move(public_path('images'), $imageName);
-            
+            $imageName = $this->imageService->saveSquareImage($request->file('image_upload'));
             $validated['image_filename'] = $imageName;
-            
             unset($validated['image_upload']);
         }
 
@@ -110,13 +112,8 @@ class OlympicGameController extends Controller
         ]);
 
         if ($request->hasFile('image_upload')) {
-            $image = $request->file('image_upload');
-            $extension = $image->getClientOriginalExtension();
-            $imageName = uniqid() . '_' . time() . '.' . $extension;
-            
-            $image->move(public_path('images'), $imageName);
+            $imageName = $this->imageService->saveSquareImage($request->file('image_upload'));
             $validated['image_filename'] = $imageName;
-            
             unset($validated['image_upload']);
         }
 
@@ -134,6 +131,11 @@ class OlympicGameController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $game = OlympicGame::findOrFail($id);
+
+        $game->delete();
+
+        return redirect()->route('olympic-games.index')
+            ->with('success', 'Олимпийские игры успешно удалены!');
     }
 }

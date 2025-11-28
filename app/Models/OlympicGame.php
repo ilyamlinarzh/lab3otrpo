@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class OlympicGame extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * Поля, которые можно массово присваивать
@@ -21,6 +22,10 @@ class OlympicGame extends Model
         'short_description',
         'detailed_description',
         'fun_fact'
+    ];
+
+    protected $dates = [
+        'deleted_at'
     ];
 
     /**
@@ -61,5 +66,10 @@ class OlympicGame extends Model
     public function setUpdatedAtAttribute($value)
     {
         $this->attributes['updated_at'] = Carbon::parse($value);
+    }
+
+    public function getIsDeletedAttribute()
+    {
+        return !is_null($this->deleted_at);
     }
 }
