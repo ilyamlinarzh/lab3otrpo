@@ -34,7 +34,7 @@
                     
                     <div class="card-body">
                         <div class="text-center mb-4">
-                            <img src="{{ asset('images/' . $game->image_filename) }}" 
+                            <img src="{{ asset('img/' . $game->image_filename) }}" 
                                  alt="{{ $game->title }}" 
                                  class="img-fluid rounded"
                                  style="max-height: 400px; object-fit: cover;">

@@ -117,7 +117,7 @@
                                 @if($game->image_filename)
                                     <div class="mt-2">
                                         <p class="mb-1">Текущее изображение:</p>
-                                        <img src="{{ asset('images/' . $game->image_filename) }}" 
+                                        <img src="{{ asset('img/' . $game->image_filename) }}" 
                                              alt="Текущее изображение" 
                                              class="img-thumbnail" 
                                              style="max-height: 150px;">

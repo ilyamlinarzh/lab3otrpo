@@ -39,7 +39,7 @@
             </span>
 
             <div class="card-img-top img-container overflow-hidden" style="aspect-ratio:1;">
-              <img src="{{ asset('images/' . $game->image_filename) }}"
+              <img src="{{ asset('img/' . $game->image_filename) }}"
                   alt="{{ $game->city }} {{ $game->year }}" 
                   class="w-100 h-100 object-fit-cover position-absolute top-50 start-50 translate-middle">
             </div>

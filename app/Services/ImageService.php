@@ -20,7 +20,7 @@ class ImageService
     {
         $imageName = uniqid() . '_' . time() . '.webp';
         
-        $directory = public_path($folder);
+        $directory = storage_path($folder);
         if (!File::exists($directory)) {
             File::makeDirectory($directory, 0755, true);
         }

@@ -104,7 +104,7 @@ class OlympicGameController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'city' => 'required|string|max:100',
-            'year' => 'required|integer|min:1900|max:2030',
+            'year' => 'required|integer|min:1900|max:2060',
             'short_description' => 'required|string|max:500',
             'detailed_description' => 'required|string',
             'fun_fact' => 'required|string|max:300',

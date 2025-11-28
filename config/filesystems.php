@@ -35,17 +35,17 @@ return [
             'root' => storage_path('app'),
         ],
 
-        'public' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-        ],
+        // 'public' => [
+        //     'driver' => 'local',
+        //     'root' => storage_path('app/public'),
+        //     'url' => env('APP_URL').'/storage',
+        //     'visibility' => 'public',
+        // ],
 
         'storage_root' => [
             'driver' => 'local',
-            'root' => storage_path(),
-            'url' => env('APP_URL').'/storage-root',
+            'root' => storage_path('images'),
+            'url' => env('APP_URL').'/img',
             'visibility' => 'public',
         ],
 
