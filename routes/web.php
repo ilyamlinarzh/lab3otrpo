@@ -14,7 +14,11 @@ use App\Http\Controllers\OlympicGameController;
 |
 */
 
-
 Route::resource('olympic-games', OlympicGameController::class);
 Route::get('/', [OlympicGameController::class, 'index']);
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

@@ -17,12 +17,27 @@
         Хронология Олимпийских игр
       </span>
     </div>
-    <a id="loadBtn" href="{{ route('olympic-games.create') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
+    <div>
+      @guest
+      <a id="loadBtn" href="{{ route('login') }}" class="btn text-accent-1 border-0">
+        Войти
+      </a>
+      <a id="loadBtn" href="{{ route('register') }}" class="btn text-accent-1 border-0">
+        Зарегистрироваться
+      </a>
+      @endguest
+      @auth
+      <form method="POST" action="{{ route('logout') }}" class="d-inline">
+        @csrf
+        <button type="submit" class="btn text-accent-1 border-0">
+            Выйти
+        </button>
+      </form>
+      <a id="loadBtn" href="{{ route('olympic-games.create') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
       Добавить
-    </a>
-    <!-- <button id="loadBtn" class="btn bg-accent-1 text-white border-0 custom-btn">
-      Добавить
-    </button> -->
+      </a>
+      @endauth
+    </div>
   </div>
 </nav>
 
