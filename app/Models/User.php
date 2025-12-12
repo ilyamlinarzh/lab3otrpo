@@ -46,6 +46,37 @@ class User extends Authenticatable
 
     public function olympicGames()
     {
-        return $this->hasMany(OlympicGame::class);
+        return $this->hasMany(OlympicGame::class, 'user_id');
     }
+
+    public function follow($authorId)
+    {
+        if ($this->id == $authorId) {
+            return false; // Нельзя подписаться на самого себя
+        }
+
+        return Follow::subscribe($this->id, $authorId);
+    }
+
+    public function unfollow($authorId)
+    {
+        return Follow::unsubscribe($this->id, $authorId);
+    }
+
+    public function followersCount()
+    {
+        return $this->followers()->count();
+    }
+
+    public function getAllGames($includeTrashed = false)
+    {
+        $query = $this->olympicGames();
+        
+        if ($includeTrashed) {
+            $query->withTrashed();
+        }
+        
+        return $query->orderBy('year', 'desc')->get();
+    }
+
 }

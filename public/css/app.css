@@ -807,6 +807,18 @@ select {
 .mt-8 {
   margin-top: 2rem;
 }
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.me-3 {
+  margin-inline-end: 0.75rem;
+}
+.ms-2 {
+  margin-inline-start: 0.5rem;
+}
+.ms-3 {
+  margin-inline-start: 0.75rem;
+}
 .block {
   display: block;
 }
@@ -1089,6 +1101,10 @@ select {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
 .pb-1 {
   padding-bottom: 0.25rem;
 }
@@ -1115,6 +1131,9 @@ select {
 }
 .pt-8 {
   padding-top: 2rem;
+}
+.ps-5 {
+  padding-inline-start: 1.25rem;
 }
 .text-center {
   text-align: center;

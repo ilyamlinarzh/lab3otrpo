@@ -21,12 +21,23 @@ class OlympicGame extends Model
         'image_filename',
         'short_description',
         'detailed_description',
-        'fun_fact'
+        'fun_fact',
+        'user_id' => 'required|exists:users,id'
     ];
 
     protected $dates = [
         'deleted_at'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'game_id');
+    }
 
     /**
      * Мутатор для поля year - всегда сохраняем как integer

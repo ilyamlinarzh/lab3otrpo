@@ -16,6 +16,11 @@
       <span class="navbar-brand mb-0 text-accent-1 fs-6 fw-normal sitename">
         Хронология Олимпийских игр
       </span>
+      @auth
+        <a id="loadBtn" href="{{ route('olympic-games.create') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
+          Друзья
+        </a>
+      @endauth
     </div>
     <div>
       @guest

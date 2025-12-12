@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\OlympicGame;
+use App\Models\Comment;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -27,6 +28,10 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::before(function ($user, $ability) {
+            if (!$user) {
+                return false;
+            }
+
             if ($user && $user->is_admin) {
                 return true;
             }
@@ -42,6 +47,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('admin', function ($user) {
             return $user && $user->is_admin;
+        });
+
+        Gate::define('delete-comment', function ($user, Comment $comment) {
+            return $user->id === $comment->user_id;
         });
     }
 }
