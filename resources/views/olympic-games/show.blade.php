@@ -60,9 +60,12 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-muted">ID #{{ $game->id }}</small>
                             <div>
+                                @canManage($game)
                                 <a href="{{ route('olympic-games.edit', $game->id) }}" class="btn btn-primary">
                                     Редактировать
                                 </a>
+                                @endauthor
+                                @softDelete($game)
                                 <form action="{{ route('olympic-games.destroy', $game->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
@@ -71,6 +74,39 @@
                                         Удалить
                                     </button>
                                 </form>
+                                @endsoftDelete
+                                @admin
+                                <form action="{{ route('olympic-games.force-delete', $game->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" 
+                                            onclick="return confirm('Вы уверены, что хотите удалить {{ $game->title }}?')">
+                                        Удалить
+                                    </button>
+                                </form>
+                                @if(method_exists($game, 'trashed') && !$game->trashed())
+                                <form action="{{ route('olympic-games.destroy', $game->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger" 
+                                            onclick="return confirm('Вы уверены, что хотите удалить {{ $game->title }}?')">
+                                        Скрыть
+                                    </button>
+                                </form>
+                                @endif
+                                @endadmin
+                                @admin
+                                    @if(method_exists($game, 'trashed') && $game->trashed())
+                                    <form action="{{ route('olympic-games.restore', $game->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('POST')
+                                        <button type="submit" class="btn btn-success" 
+                                                onclick="return confirm('Вы уверены, что хотите восстановить {{ $game->title }}?')">
+                                            Восстановить
+                                        </button>
+                                    </form>
+                                    @endif
+                                @endadmin
                             </div>
                         </div>
                     </div>

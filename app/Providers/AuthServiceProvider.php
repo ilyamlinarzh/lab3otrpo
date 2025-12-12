@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\OlympicGame;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,22 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::before(function ($user, $ability) {
+            if ($user && $user->is_admin) {
+                return true;
+            }
+        });
+
+        Gate::define('edit-game', function ($user, OlympicGame $game) {
+            return $user->id === $game->user_id;
+        });
+
+        Gate::define('delete-game', function ($user, OlympicGame $game) {
+            return $user->id === $game->user_id;
+        });
+
+        Gate::define('admin', function ($user) {
+            return $user && $user->is_admin;
+        });
     }
 }

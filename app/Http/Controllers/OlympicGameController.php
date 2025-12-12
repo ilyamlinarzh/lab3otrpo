@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\OlympicGame;
 use App\Services\ImageService;
+use Illuminate\Support\Facades\Gate;
 
 class OlympicGameController extends Controller
 {
@@ -78,7 +79,11 @@ class OlympicGameController extends Controller
      */
     public function show($id)
     {
-        $game = OlympicGame::findOrFail($id);
+        if (auth()->check() && auth()->user()->is_admin) {
+            $game = OlympicGame::withTrashed()->findOrFail($id);
+        } else {
+            $game = OlympicGame::findOrFail($id);
+        }
         return view('olympic-games.show', compact('game'));
     }
 
@@ -91,7 +96,7 @@ class OlympicGameController extends Controller
     public function edit($id)
     {
         $game = OlympicGame::findOrFail($id);
-        if ($game->user_id !== auth()->id() && !auth()->user()->is_admin) {
+        if (!Gate::allows('edit-game', $game)) {
             abort(403, 'У вас нет прав для редактирования этой записи');
         }
         return view('olympic-games.edit', compact('game'));
@@ -107,7 +112,7 @@ class OlympicGameController extends Controller
     public function update(Request $request, $id)
     {
         $game = OlympicGame::findOrFail($id);
-        if ($game->user_id !== auth()->id() && !auth()->user()->is_admin) {
+        if (!Gate::allows('edit-game', $game)) {
             abort(403, 'У вас нет прав для редактирования этой записи');
         }
 
@@ -143,7 +148,7 @@ class OlympicGameController extends Controller
     {
         $game = OlympicGame::findOrFail($id);
 
-        if ($game->user_id !== auth()->id()) {
+        if (!Gate::allows('delete-game', $game)) {
             abort(403, 'Вы можете удалять только свои записи');
         }
 
@@ -154,18 +159,34 @@ class OlympicGameController extends Controller
 
     public function forceDelete($id)
     {
-        if (!auth()->user()->is_admin) {
+        if (!Gate::allows('admin')) {
             abort(403, 'Только администратор может полностью удалять записи');
         }
 
         $game = OlympicGame::withTrashed()->findOrFail($id);
         
-        // if ($game->image_filename) {
-        //     $this->imageService->deleteImage($game->image_filename);
-        // }
-        
         $game->forceDelete();
 
         return redirect()->back()->with('success', 'Олимпийские игры полностью удалены!');
+    }
+
+    /**
+    * Restore soft deleted resource (admin only)
+    */
+    public function restore($id)
+    {
+        if (!Gate::allows('admin')) {
+            abort(403, 'Только администратор может восстанавливать записи');
+        }
+
+        $game = OlympicGame::withTrashed()->findOrFail($id);
+        
+        if (!$game->trashed()) {
+            return redirect()->back()->with('error', 'Эта запись не была удалена');
+        }
+        
+        $game->restore();
+
+        return redirect()->back();
     }
 }
