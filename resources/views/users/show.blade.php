@@ -23,8 +23,6 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div style="width: 100%;" class="row">
-                    <!-- Аватар и основная информация -->
-                    <!-- <div class="col-md-3 text-center"> -->
                     <div class="col-md-12">
                         <h1 class="h2 mb-1">{{ $user->name }}</h1>
                         <p class="text-muted mb-3">

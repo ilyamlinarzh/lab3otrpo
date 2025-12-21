@@ -121,12 +121,6 @@
         @if($comments->isEmpty())
             <div class="card">
                 <div class="card-body text-center py-5">
-                    <div class="mb-3">
-                        <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="text-muted">
-                            <path d="M7.5 8.25h9m-9 3H12m-7.5 3h9m-3-6.75v6.75" stroke-linecap="round" stroke-linejoin="round"></path>
-                            <path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18Z" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </div>
                     <h4 class="h5 mb-2">Пока нет комментариев</h4>
                     <p class="text-muted mb-0">Будьте первым, кто оставит комментарий к этой игре!</p>
                 </div>
