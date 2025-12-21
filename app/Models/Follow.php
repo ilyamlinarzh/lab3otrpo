@@ -17,6 +17,7 @@ class Follow extends Model
     ];
 
     public $timestamps = false; // Используем кастомное created_at
+    protected $dates = ['created_at'];
 
     /**
      * Правила валидации
@@ -79,6 +80,7 @@ class Follow extends Model
                   ->delete();
     }
 
+
     /**
      * Получить всех подписчиков пользователя
      */
@@ -109,5 +111,43 @@ class Follow extends Model
         return self::where('subscriber_user_id', $subscriberId)
                   ->where('author_user_id', $authorId)
                   ->exists();
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        // После создания подписки
+        static::created(function ($follow) {
+            // Автоматически создаем обратную подписку
+            // Но только если её ещё нет
+            $reverseExists = self::where('subscriber_user_id', $follow->author_user_id)
+                ->where('author_user_id', $follow->subscriber_user_id)
+                ->exists();
+            
+            if (!$reverseExists) {
+                self::create([
+                    'subscriber_user_id' => $follow->author_user_id,
+                    'author_user_id' => $follow->subscriber_user_id,
+                    'created_at' => now()
+                ]);
+            }
+        });
+
+        static::deleting(function ($follow) {
+            // Сохраняем ID для удаления обратной записи
+            $authorId = $follow->author_user_id;
+            $subscriberId = $follow->subscriber_user_id;
+            
+            // После удаления основной записи
+            static::deleted(function () use ($authorId, $subscriberId) {
+                // Удаляем обратную подписку БЕЗ вызова событий
+                self::withoutEvents(function () use ($authorId, $subscriberId) {
+                    self::where('subscriber_user_id', $authorId)
+                        ->where('author_user_id', $subscriberId)
+                        ->delete();
+                });
+            });
+        });
     }
 }

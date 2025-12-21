@@ -5,6 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Комментарии: {{ $game->title }}</title>
     <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <style>
+        .comment-friend {
+            background-color: #f0f9ff;
+            border-left: 4px solid #4a6fa5;
+        }
+        .comment-current-user {
+            background-color: #f8fff0;
+            border-left: 4px solid #28a745;
+        }
+        .friend-badge {
+            background-color: #4a6fa5;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 8px;
+        }
+        .current-user-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 8px;
+        }
+    </style>
 </head>
 <body>
     <!-- Навигация -->
@@ -19,9 +45,6 @@
             <div>
                 <a href="{{ route('olympic-games.show', $game->id) }}" class="btn bg-accent-1 text-white border-0 custom-btn me-2">
                     К игре
-                </a>
-                <a href="/" class="btn bg-accent-2 text-white border-0 custom-btn">
-                    К списку
                 </a>
             </div>
         </div>
@@ -112,16 +135,37 @@
             <div class="card">
                 <div class="card-header bg-bg-2 d-flex justify-content-between align-items-center">
                     <h3 class="h5 mb-0">Все комментарии ({{ $comments->count() }})</h3>
+                    @auth
+                        <div class="d-flex gap-2">
+                            <small class="d-flex align-items-center">
+                                <span class="d-inline-block rounded-circle bg-success me-1" style="width: 10px; height: 10px;"></span>
+                                <span class="text-muted">Вы</span>
+                            </small>
+                            <small class="d-flex align-items-center">
+                                <span class="d-inline-block rounded-circle bg-primary me-1" style="width: 10px; height: 10px;"></span>
+                                <span class="text-muted">Друг</span>
+                            </small>
+                        </div>
+                    @endauth
                 </div>
                 
                 <div class="list-group list-group-flush">
                     @foreach($comments as $comment)
-                        <div class="list-group-item">
+                        <div class="list-group-item @if(isset($comment->isCurrentUser) && $comment->isCurrentUser) comment-current-user @elseif(isset($comment->isFriend) && $comment->isFriend) comment-friend @endif">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <div style="width: 100%;" class="d-flex align-items-center justify-content-between">
-                                    <div>
-                                        <strong class="d-block">{{ $comment->user->name }}</strong>
-                                        <small class="text-muted">{{ $comment->created_at->format('d.m.Y H:i') }}</small>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <strong class="d-block">
+                                                {{ $comment->user->name }}
+                                                @if(isset($comment->isCurrentUser) && $comment->isCurrentUser)
+                                                    <span class="current-user-badge">Вы</span>
+                                                @elseif(isset($comment->isFriend) && $comment->isFriend)
+                                                    <span class="friend-badge">Друг</span>
+                                                @endif
+                                            </strong>
+                                            <small class="text-muted">{{ $comment->created_at->format('d.m.Y H:i') }}</small>
+                                        </div>
                                     </div>
                                     @can('delete-comment', $comment)
                                         <div class="dropdown">
@@ -148,10 +192,8 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                @endcan
+                                    @endcan
                                 </div>
-
-                          
                             </div>
                             
                             <div class="comment-text">

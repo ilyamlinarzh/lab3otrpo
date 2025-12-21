@@ -74,7 +74,6 @@ class CommentController extends Controller
 
     public function gameComments($gameId)
     {   
-        
         $game = OlympicGame::findOrFail($gameId);
         
         if ($game->trashed() && (!Auth::check() || !Auth::user()->is_admin)) {
@@ -85,6 +84,17 @@ class CommentController extends Controller
             ->with('user')
             ->orderBy('created_at', 'desc')
             ->get();
+
+        // Определяем для каждого комментария, является ли автор другом
+        if (Auth::check()) {
+            $currentUser = Auth::user();
+            
+            $comments = $comments->map(function($comment) use ($currentUser) {
+                $comment->isFriend = $currentUser->isFollowing($comment->user_id);
+                $comment->isCurrentUser = $comment->user_id == $currentUser->id;
+                return $comment;
+            });
+        }
 
         return view('olympic-games.comments', compact('game', 'comments'));
     }

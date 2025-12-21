@@ -17,7 +17,7 @@
         Хронология Олимпийских игр
       </span>
       @auth
-        <a id="loadBtn" href="{{ route('olympic-games.create') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
+        <a id="loadBtn" href="{{ route('follow.feed') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
           Друзья
         </a>
       @endauth
@@ -131,11 +131,13 @@
   <div class="container">
     <div class="d-flex justify-content-between align-items-center">
       <span class="siteAuthor">Прудников Илья</span>
+      <a href="{{ route('users.index') }}" class="btn text-accent-1">
+        👤 Пользователи сайта
+      </a>
       <div class="social-media">
         <ul class="list-unstyled d-flex align-items-center gap-3 mb-0">
           <li class="d-flex align-items-center justify-content-center rounded-circle border border-black" style="width: 36px; height: 36px;">
             <a href="https://vk.com/" class="d-flex align-items-center justify-content-center">
-              <!-- Исправленный путь для SVG -->
               <img src="{{ asset('svg/vk.svg') }}" alt="VK" width="20" height="20" />
             </a>
           </li>

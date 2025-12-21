@@ -49,6 +49,22 @@ class User extends Authenticatable
         return $this->hasMany(OlympicGame::class, 'user_id');
     }
 
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'follows',
+            'subscriber_user_id',
+            'author_user_id'
+        )->withTimestamps('created_at');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'follows', 
+            'author_user_id', // Этот пользователь - автор (на кого подписываются)
+            'subscriber_user_id' // Подписчики
+        )->withTimestamps('created_at');
+    }
+
     public function follow($authorId)
     {
         if ($this->id == $authorId) {
@@ -77,6 +93,11 @@ class User extends Authenticatable
         }
         
         return $query->orderBy('year', 'desc')->get();
+    }
+
+    public function isFollowing($authorId)
+    {
+        return $this->following()->where('author_user_id', $authorId)->exists();
     }
 
 }

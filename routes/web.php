@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OlympicGameController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FollowController;
+use App\Http\Controllers\UserController;
 
 
 Route::resource('olympic-games', OlympicGameController::class);
@@ -26,6 +28,35 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/olympic-games/{gameId}/comments', [CommentController::class, 'gameComments'])->name('games.comments');
 
+Route::get('/feed', [FollowController::class, 'feed'])->name('follow.feed');
+
+Route::post('/follow', [FollowController::class, 'follow'])->name('follow.subscribe');
+Route::post('/unfollow', [FollowController::class, 'unfollow'])->name('follow.unsubscribe');
+
+
+// Маршруты пользователей
+Route::controller(UserController::class)->group(function () {
+    // Список пользователей (доступен всем)
+    Route::get('/users', 'index')->name('users.index');
+    
+    // Игры пользователя (доступны всем)
+    Route::get('/users/{id}/games', 'games')->name('users.games');
+    
+    // Подписчики пользователя (доступны всем)
+    // Route::get('/users/{id}/followers', 'followers')->name('users.followers');
+    
+    // // Подписки пользователя (доступны всем)
+    // Route::get('/users/{id}/following', 'following')->name('users.following');
+});
+
+// Защищенные маршруты (только для авторизованных)
+Route::middleware('auth')->group(function () {
+    // Профиль пользователя
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    
+    // Обновление профиля
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+});
 
 
 require __DIR__.'/auth.php';
