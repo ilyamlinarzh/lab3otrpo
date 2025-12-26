@@ -6,6 +6,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 use Illuminate\Support\Facades\Gate;
 use App\Models\OlympicGame;
 use App\Models\Comment;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,7 +16,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\Comment' => 'App\Policies\CommentPolicy',
+        'App\Models\OlympicGame' => 'App\Policies\OlympicGamePolicy',
     ];
 
     /**
@@ -26,6 +28,13 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        if (! $this->app->routesAreCached()) {
+            Passport::routes();
+            
+            Passport::tokensExpireIn(now()->addDays(15));
+            Passport::refreshTokensExpireIn(now()->addDays(30));
+        }
 
         Gate::before(function ($user, $ability) {
             if (!$user) {

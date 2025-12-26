@@ -5,6 +5,7 @@ use App\Http\Controllers\OlympicGameController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 
 
 Route::resource('olympic-games', OlympicGameController::class);
@@ -56,6 +57,21 @@ Route::middleware('auth')->group(function () {
     
     // Обновление профиля
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Страница профиля с API токенами
+    Route::get('/profile/api', [ProfileController::class, 'index'])
+        ->name('profile.index');
+    
+    Route::post('/profile/create-token', [ProfileController::class, 'createToken'])
+        ->name('profile.create-token');
+    
+    Route::delete('/profile/revoke-token/{tokenId}', [ProfileController::class, 'revokeToken'])
+        ->name('profile.revoke-token');
+    
+    Route::delete('/profile/revoke-all-tokens', [ProfileController::class, 'revokeAllTokens'])
+        ->name('profile.revoke-all-tokens');
 });
 
 

@@ -17,11 +17,6 @@ class OlympicGameController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $sortOrder = $request->get('sort', 'desc');
@@ -31,22 +26,11 @@ class OlympicGameController extends Controller
         return view('welcome', compact('games'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('olympic-games.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -71,12 +55,6 @@ class OlympicGameController extends Controller
         return redirect("/")->with('success', 'Олимпийские игры успешно добавлены!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         if (auth()->check() && auth()->user()->is_admin) {
@@ -87,12 +65,6 @@ class OlympicGameController extends Controller
         return view('olympic-games.show', compact('game'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $game = OlympicGame::findOrFail($id);
@@ -102,13 +74,6 @@ class OlympicGameController extends Controller
         return view('olympic-games.edit', compact('game'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $game = OlympicGame::findOrFail($id);
@@ -138,12 +103,6 @@ class OlympicGameController extends Controller
             ->with('success', 'Олимпийские игры успешно обновлены!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $game = OlympicGame::findOrFail($id);
@@ -170,9 +129,6 @@ class OlympicGameController extends Controller
         return redirect()->back()->with('success', 'Олимпийские игры полностью удалены!');
     }
 
-    /**
-    * Restore soft deleted resource (admin only)
-    */
     public function restore($id)
     {
         if (!Gate::allows('admin')) {

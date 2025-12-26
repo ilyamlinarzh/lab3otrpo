@@ -9,42 +9,68 @@
 <body>
   <!-- Навигация -->
   <nav class="bg-light navbar navbar-expand-lg bg-bg-2 border border-border py-2">
-  <div class="container d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center">
-      <div class="bg-accent-1 text-white d-flex align-items-center justify-content-center 
-                  me-4 custom-logo">P</div>
-      <span class="navbar-brand mb-0 text-accent-1 fs-6 fw-normal sitename">
-        Хронология Олимпийских игр
-      </span>
-      @auth
-        <a id="loadBtn" href="{{ route('follow.feed') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
-          Друзья
-        </a>
-      @endauth
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <div class="bg-accent-1 text-white d-flex align-items-center justify-content-center 
+                        me-4 custom-logo">P</div>
+            <a href="/" class="navbar-brand mb-0 text-accent-1 fs-6 fw-normal sitename">
+                    Хронология Олимпийских игр
+                </a>
+        </div>
+        
+        <div>
+            @guest
+                <!-- Для неавторизованных - просто кнопка Войти -->
+                <a id="loadBtn" href="{{ route('login') }}" class="btn text-accent-1 border-0">
+                    Войти
+                </a>
+            @endguest
+            
+            @auth
+                <!-- Выпадающее меню для авторизованных -->
+                <div class="dropdown d-inline-block">
+                    <button class="btn text-accent-1 border-0 dropdown-toggle" 
+                            type="button" 
+                            id="userDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false">
+                        {{ Auth::user()->name }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('follow.feed') }}">
+                                Моя лента
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                Профиль
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('olympic-games.create') }}">
+                                Добавить игру
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}" class="mb-0">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right me-2" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                    </svg>
+                                    Выйти
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            @endauth
+        </div>
     </div>
-    <div>
-      @guest
-      <a id="loadBtn" href="{{ route('login') }}" class="btn text-accent-1 border-0">
-        Войти
-      </a>
-      <a id="loadBtn" href="{{ route('register') }}" class="btn text-accent-1 border-0">
-        Зарегистрироваться
-      </a>
-      @endguest
-      @auth
-      <form method="POST" action="{{ route('logout') }}" class="d-inline">
-        @csrf
-        <button type="submit" class="btn text-accent-1 border-0">
-            Выйти
-        </button>
-      </form>
-      <a id="loadBtn" href="{{ route('olympic-games.create') }}" class="btn bg-accent-1 text-white border-0 custom-btn">
-      Добавить
-      </a>
-      @endauth
-    </div>
-  </div>
-</nav>
+  </nav>
 
   <!-- Контент -->
   <div class="container my-4">
@@ -82,7 +108,7 @@
               <h5 class="card-title">{{ $game->title }}</h5>
               <p class="card-text flex-grow-1">
                 {{ $game->short_description }}
-                <a href="{{ route('olympic-games.show', $game->id) }}" class="details-link text-accent-1" data-bs-toggle="modal" data-bs-target="#detailsModal" data-index="{{ $game->id }}" data-game-id="{{ $game->id }}">
+                <a href="{{ route('olympic-games.show', $game->id) }}" class="text-accent-1"  data-index="{{ $game->id }}" data-game-id="{{ $game->id }}">
                   Подробнее
                 </a>
               </p>
@@ -156,6 +182,7 @@
     </div>
   </div>
 </footer>
-<script src="{{ asset('js/main.js') }}"></script>
+<!-- <script src="{{ asset('js/main.js') }}"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -16,12 +16,9 @@ class Follow extends Model
         'author_user_id'
     ];
 
-    public $timestamps = false; // Используем кастомное created_at
+    public $timestamps = false;
     protected $dates = ['created_at'];
 
-    /**
-     * Правила валидации
-     */
     public static function rules()
     {
         return [
@@ -29,25 +26,16 @@ class Follow extends Model
         ];
     }
 
-    /**
-     * Отношение к подписчику (тот, кто подписывается)
-     */
     public function subscriber()
     {
         return $this->belongsTo(User::class, 'subscriber_user_id');
     }
 
-    /**
-     * Отношение к автору (тот, на кого подписываются)
-     */
     public function author()
     {
         return $this->belongsTo(User::class, 'author_user_id');
     }
 
-    /**
-     * Проверка существования подписки
-     */
     public static function existsSubscription($subscriberId, $authorId)
     {
         return self::where('subscriber_user_id', $subscriberId)
@@ -55,9 +43,6 @@ class Follow extends Model
                   ->exists();
     }
 
-    /**
-     * Подписаться на пользователя
-     */
     public static function subscribe($subscriberId, $authorId)
     {
         if ($subscriberId == $authorId) {
@@ -70,9 +55,6 @@ class Follow extends Model
         ]);
     }
 
-    /**
-     * Отписаться от пользователя
-     */
     public static function unsubscribe($subscriberId, $authorId)
     {
         return self::where('subscriber_user_id', $subscriberId)
@@ -80,10 +62,6 @@ class Follow extends Model
                   ->delete();
     }
 
-
-    /**
-     * Получить всех подписчиков пользователя
-     */
     public static function getFollowers($userId)
     {
         return self::where('author_user_id', $userId)
@@ -92,9 +70,6 @@ class Follow extends Model
                   ->pluck('subscriber');
     }
 
-    /**
-     * Получить все подписки пользователя
-     */
     public static function getSubscriptions($userId)
     {
         return self::where('subscriber_user_id', $userId)
@@ -103,9 +78,6 @@ class Follow extends Model
                   ->pluck('author');
     }
 
-    /**
-     * Проверка подписан ли пользователь на другого
-     */
     public static function isFollowing($subscriberId, $authorId)
     {
         return self::where('subscriber_user_id', $subscriberId)
@@ -117,10 +89,7 @@ class Follow extends Model
     {
         parent::boot();
 
-        // После создания подписки
         static::created(function ($follow) {
-            // Автоматически создаем обратную подписку
-            // Но только если её ещё нет
             $reverseExists = self::where('subscriber_user_id', $follow->author_user_id)
                 ->where('author_user_id', $follow->subscriber_user_id)
                 ->exists();
@@ -135,13 +104,10 @@ class Follow extends Model
         });
 
         static::deleting(function ($follow) {
-            // Сохраняем ID для удаления обратной записи
             $authorId = $follow->author_user_id;
             $subscriberId = $follow->subscriber_user_id;
             
-            // После удаления основной записи
             static::deleted(function () use ($authorId, $subscriberId) {
-                // Удаляем обратную подписку БЕЗ вызова событий
                 self::withoutEvents(function () use ($authorId, $subscriberId) {
                     self::where('subscriber_user_id', $authorId)
                         ->where('author_user_id', $subscriberId)

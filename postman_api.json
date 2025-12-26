@@ -1,0 +1,392 @@
+{
+  "info": {
+    "name": "Olympic Games API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Полное REST API для управления Олимпийскими играми и комментариями"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDliYTFhYjc1MWQ0NWFkMGMzNjg0YzNmNWQwZTQ0Y2RkOTNhZGYwMDEyM2U4Y2FmNmE5MDY1NDU0MzgxNmVhMTI1NDJkNGZiNjQyNjU3N2IiLCJpYXQiOjE3NjYzMjA3NzguNTUxMjg4LCJuYmYiOjE3NjYzMjA3NzguNTUxMjg5LCJleHAiOjE3OTc4NTY3NzguNTQ5MjcsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.GEUrVHLMKUSLsy33Xc9u_gZrS5qnBk_Lz0kKHiIgARlLJ-VlLh2ojYrbCbsrtAhELJAbksPp5XKbjPMhhKPJmt0cWC4v9CZogsTIPGqDK-lDQtwbWZdjOwlJAm4H08AaFJ7aO0QUs2oix4nxct-XOmIrJP23C9cCRI8A1TKaGTW-byMRrZ3OoRlv7ldAaN2vbkFi5eyfTr3JJpO0ygR8DMGQUqKMI6mlMu8lCzM4XEIUJg2xBAwN8fXNDZ9q-I2hbq7qwpkkJPxxs3UewbiNNjEbmIg6AsvllATxBrFqUw0w9a2HYRFmfID8pxjbzOSAqubRU6G9Ua5eOKdRj3MHohn1yE_MwHbGaqIY0KIc7uAfTViBX4cDjhpaW09btmvODRcv4tkpH2nOX4NKasGlrsQ42ob8H9FK6LHOaNONX1WyAH5iDqckKocwI_KjErmXe4umKtTKddEz8HWCTK8QdcHofDU6o1-zcqEsRXX8rDm7wVCX2Ci9kDtZWGWRQg74JaRioE4uVlQv-9y5aKQR-bld87a7_P0pDWqYBkTC2-6-cAmmwh4MvXgdyT1prlydOM3RPKKqf2NfpuDRM17jNAmlV6A7zJOlagzbWC1ZU7QHWWPRcfVQZHlpCScpVLLVB-rqXNu7DOOpRKP3DvcJXPUkhX96ERWt6MqY4jBX4dw",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "🔐 Аутентификация",
+      "item": [
+        {
+          "name": "01. Проверка токена - GET /api/user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/user",
+              "host": ["{{base_url}}"],
+              "path": ["api", "user"]
+            },
+            "description": "Проверка валидности токена и получение данных текущего пользователя"
+          }
+        },
+        {
+          "name": "02. Публичный эндпоинт - GET /api/test",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/test",
+              "host": ["{{base_url}}"],
+              "path": ["api", "test"]
+            },
+            "description": "Тестовый публичный эндпоинт (не требует токена)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🎮 Olympic Games (Основная сущность)",
+      "item": [
+        {
+          "name": "01. GET /api/olympic-games - Список всех игр",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/olympic-games",
+              "host": ["{{base_url}}"],
+              "path": ["api", "olympic-games"],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Сортировка по году: asc/desc"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10",
+                  "description": "Количество на странице"
+                },
+                {
+                  "key": "year",
+                  "value": "2020",
+                  "description": "Фильтр по году (опционально)"
+                },
+                {
+                  "key": "city",
+                  "value": "Токио",
+                  "description": "Фильтр по городу (опционально)"
+                }
+              ]
+            },
+            "description": "Получение списка Олимпийских игр с пагинацией и фильтрацией"
+          }
+        },
+        {
+          "name": "02. GET /api/olympic-games/{id} - Получить конкретную игру",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/olympic-games/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "olympic-games", "1"]
+            },
+            "description": "Получение детальной информации об одной игре"
+          }
+        },
+        {
+          "name": "03. POST /api/olympic-games - Создать новую игру",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Летние Олимпийские игры 2024\",\n    \"city\": \"Париж\",\n    \"year\": 2024,\n    \"short_description\": \"XXXIII летние Олимпийские игры в Париже\",\n    \"detailed_description\": \"Подробное описание летних Олимпийских игр 2024 года в Париже, Франция. Это будут третьи игры в Париже после 1900 и 1924 годов.\",\n    \"fun_fact\": \"Впервые за 100 лет Олимпийские игры вернутся в Париж\",\n    \"image_filename\": \"paris_2024.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/olympic-games",
+              "host": ["{{base_url}}"],
+              "path": ["api", "olympic-games"]
+            },
+            "description": "Создание новой записи об Олимпийских играх (требуется токен)"
+          }
+        },
+        {
+          "name": "04. PUT /api/olympic-games/{id} - Обновить игру",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Обновленное название игры\",\n    \"city\": \"Обновленный город\",\n    \"year\": 2024,\n    \"short_description\": \"Обновленное краткое описание\",\n    \"detailed_description\": \"Обновленное подробное описание игр\",\n    \"fun_fact\": \"Обновленный интересный факт\",\n    \"image_filename\": \"updated_image.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/olympic-games/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "olympic-games", "1"]
+            },
+            "description": "Обновление существующей игры (требуется токен, только автор или админ)"
+          }
+        },
+        {
+          "name": "05. DELETE /api/olympic-games/{id} - Удалить игру",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/olympic-games/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "olympic-games", "1"]
+            },
+            "description": "Удаление игры (мягкое удаление, можно восстановить) (требуется токен, только автор или админ)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "💬 Comments (Вспомогательная сущность)",
+      "item": [
+        {
+          "name": "01. GET /api/comments/game/{gameId} - Комментарии к игре",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/comments/game/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "comments", "game", "1"],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "10",
+                  "description": "Количество комментариев на странице"
+                },
+                {
+                  "key": "sort",
+                  "value": "desc",
+                  "description": "Сортировка: asc/desc"
+                }
+              ]
+            },
+            "description": "Получение всех комментариев для конкретной игры"
+          }
+        },
+        {
+          "name": "02. GET /api/comments/{id} - Получить конкретный комментарий",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/comments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "comments", "1"]
+            },
+            "description": "Получение детальной информации о комментарии"
+          }
+        },
+        {
+          "name": "03. POST /api/comments - Создать комментарий",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"game_id\": 1,\n    \"text\": \"Отличные игры! Очень понравилась организация и атмосфера.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "comments"]
+            },
+            "description": "Создание нового комментария к игре (требуется токен)"
+          }
+        },
+        {
+          "name": "04. PUT /api/comments/{id} - Обновить комментарий",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"text\": \"Обновленный текст комментария. Игры были действительно впечатляющими!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "comments", "1"]
+            },
+            "description": "Обновление существующего комментария (требуется токен, только автор или админ)"
+          }
+        },
+        {
+          "name": "05. DELETE /api/comments/{id} - Удалить комментарий",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/comments/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "comments", "1"]
+            },
+            "description": "Удаление комментария (требуется токен, только автор или админ)"
+          }
+        }
+      ]
+    },
+    {
+      "name": "🔄 Примеры запросов с curl",
+      "item": [
+        {
+          "name": "Пример 1: Получить все игры",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "curl -X GET '{{base_url}}/api/olympic-games' -H 'Content-Type: application/json'",
+              "host": ["{{base_url}}"],
+              "path": ["api", "olympic-games"]
+            },
+            "description": "cURL команда:\ncurl -X GET 'http://127.0.0.1:8000/api/olympic-games' \\\n  -H 'Content-Type: application/json'"
+          }
+        },
+        {
+          "name": "Пример 2: Создать игру с токеном",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "curl -X POST '{{base_url}}/api/olympic-games' \\\n  -H 'Authorization: Bearer {{access_token}}' \\\n  -H 'Content-Type: application/json' \\\n  -d '{\n    \"title\": \"Новые игры\",\n    \"city\": \"Город\",\n    \"year\": 2024,\n    \"short_description\": \"Краткое описание\",\n    \"detailed_description\": \"Подробное описание\",\n    \"fun_fact\": \"Интересный факт\"\n  }'"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/olympic-games",
+              "host": ["{{base_url}}"],
+              "path": ["api", "olympic-games"]
+            },
+            "description": "cURL команда с токеном"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class OlympicGame extends Model
 {
@@ -82,5 +84,58 @@ class OlympicGame extends Model
     public function getIsDeletedAttribute()
     {
         return !is_null($this->deleted_at);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($game) {
+            if (empty($game->user_id) && Auth::check()) {
+                $game->user_id = Auth::id();
+            }
+            
+            if (!Auth::check() || Gate::forUser(Auth::user())->denies('create-olympic-game')) {
+                throw new \Exception('Для создания записи необходимо авторизоваться');
+            }
+            
+            return true;
+        });
+
+        static::updating(function ($game) {
+            if (!is_null($game->deleted_at)) {
+                if (!Auth::check() || Gate::forUser(Auth::user())->denies('admin')) {
+                    throw new \Exception('Нельзя редактировать удаленную запись');
+                }
+                return true;
+            }
+            
+            $user = Auth::user();
+            if (!$user || Gate::forUser($user)->denies('edit-game', $game)) {
+                throw new \Exception('Вы можете редактировать только свои записи');
+            }
+            
+            return true;
+        });
+
+        static::deleting(function ($game) {
+            $user = Auth::user();
+            
+            if (!$user || Gate::forUser($user)->denies('delete-game', $game)) {
+                throw new \Exception('Вы можете удалять только свои записи');
+            }
+            
+            return true;
+        });
+
+        static::restoring(function ($game) {
+            $user = Auth::user();
+            
+            if (!$user || Gate::forUser($user)->denies('admin')) {
+                throw new \Exception('Только администратор может восстанавливать удаленные записи');
+            }
+            
+            return true;
+        });
     }
 }
